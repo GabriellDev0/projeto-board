@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import styles from './header.module.scss';
+import { SigninButton } from '../SigninButton/SigninButton';
 
 const Header = () => {
   return (
@@ -19,7 +20,7 @@ const Header = () => {
           </Link>
         </nav>
 
-        <button>Entrar com github</button>
+        <SigninButton width='35px' height='35px'/>
       </div>
     </header>
   );
