@@ -10,13 +10,13 @@ type imgProps = {
 
 export function SigninButton({width, height}:imgProps) {
 
-  const {data: session, status}= useSession()
-  console.log(session)
+  const {data: session, status} = useSession()
 
-  return session ? (
+
+  return status === 'authenticated' ? (
     <button type="button" className={styles.signInButton} onClick={() => signOut()}>
-      <img width={width} height={height} src={session.user?.image || ''} alt="Foto do usuário" />
-      Olá GabriellDev0
+      <img width={width} height={height} src={session.user?.image || '/images/white_img_user.jpg'} alt="Foto do usuário" />
+      Olá {session.user?.name}
       <FiX color="#737380" className={styles.closeIcon}/>
     </button>
   ) : (
