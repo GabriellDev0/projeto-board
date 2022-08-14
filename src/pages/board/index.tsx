@@ -4,24 +4,48 @@ import { useState, FormEvent } from 'react';
 
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/react';
+import Link from 'next/link';
 
 import styles from './board.module.scss';
-import { FiPlus, FiCalendar, FiEdit2, FiTrash, FiClock } from 'react-icons/fi';
+import { FiPlus, FiCalendar, FiEdit2, FiTrash, FiClock, FiX } from 'react-icons/fi';
 import { SupportButton } from '../../components/SupportButton/SupportButton';
-
+import { format } from 'date-fns';
 import { db } from '../../services/firebaseConnection';
-import { collection, addDoc } from 'firebase/firestore';
+import {
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  orderBy,
+  where,
+  deleteDoc,
+  doc,
+  updateDoc,
+} from 'firebase/firestore';
 
+type TaskList = {
+  id: string;
+  created: string | Date;
+  createdFormated?: string;
+  tarefa: string;
+  userId: string;
+  nome: string;
+};
 
 interface BoardProps {
   user: {
     id: string;
     name: string;
   };
+  data: [];
 }
 
-export default function Board({ user }: BoardProps) {
+export default function Board({ user, data }: BoardProps) {
   const [input, setInput] = useState('');
+  const [taskList, setTaskList] = useState<TaskList[]>(data);
+
+  const [taskEdit, setTaskEdit] = useState<TaskList | null>(null)
+
 
   async function handleAddTask(e: FormEvent) {
     e.preventDefault();
@@ -29,19 +53,75 @@ export default function Board({ user }: BoardProps) {
       alert('Preencha alguma tarefa');
       return;
     }
+
+    if(taskEdit){
+        const tarefa = doc(db, "tarefas", taskEdit.id)
+        await updateDoc(tarefa, {
+            tarefa: input
+        }).then(()=>{
+            let data= taskList;
+            let taskIndex = taskList.findIndex(item => item.id === taskEdit.id)
+            data[taskIndex].tarefa = input
+            setTaskList(data)
+            setTaskEdit(null)
+            setInput('')
+        })
+        return;
+    }
+
+
     const docRef = await addDoc(collection(db, 'tarefas'), {
       created: new Date(),
       tarefa: input,
       userId: user.id,
       nome: user.name,
     })
-      .then(() => {
+      .then((doc) => {
         console.log('CADASTRADO COM SUCESSO');
+        let data = {
+          id: doc.id,
+          created: new Date(),
+          createdFormated: format(new Date(), 'dd MMMM yyyy'),
+          tarefa: input,
+          userId: user.id,
+          nome: user.name,
+        };
+        setTaskList([...taskList, data]);
+        setInput('');
       })
       .catch((error) => {
         console.log('ERROR AO CADASTRAR', error);
       });
   }
+
+  async function handleDelete(id: string) {
+    const alert = window.confirm('Deseja realmente excluir esta tarefa ?');
+
+    if (alert) {
+      await deleteDoc(doc(db, 'tarefas', id))
+      .then(() =>{
+        console.log('DELETADO COM SUCESSO')
+        let taskDeleted = taskList.filter(item =>{
+            return (item.id !== id)
+      })
+      setTaskList(taskDeleted)
+    })
+      .catch(error =>{
+          console.log(error)
+      });
+    }
+  }
+
+  function handleEditTask(task: TaskList){
+      setTaskEdit(task)
+      setInput(task.tarefa)
+  }
+
+  function handleCancelEdit(){
+      setInput('')
+      setTaskEdit(null)
+  }
+
 
   return (
     <>
@@ -49,6 +129,16 @@ export default function Board({ user }: BoardProps) {
         <title>Minhas tarefas - Board</title>
       </Head>
       <main className={styles.container}>
+
+      {taskEdit && (
+        <span className={styles.warnText}>
+          <button onClick={ handleCancelEdit }>
+          <FiX size={30} color={"#FF3636"}/>
+          </button>
+          Você está editando uma tarefa
+        </span>
+      )}
+
         <form onSubmit={handleAddTask}>
           <input
             type="text"
@@ -61,32 +151,36 @@ export default function Board({ user }: BoardProps) {
           </button>
         </form>
 
-        <h1>Você tem 2 tarefas!</h1>
+        <h1>
+          Você tem {taskList.length} {taskList.length === 1 ? 'Tarefa' : 'Tarefas'}
+        </h1>
 
         <section>
-          <article className={styles.taskList}>
-            <p>
-              Aprender criar projetos usando Next JS e aplicando firebase como
-              back.
-            </p>
-            <div className={styles.actions}>
-              <div>
+          {taskList.map((task) => (
+            <article key={task.id} className={styles.taskList}>
+              <Link href={`/board/${task.id}`}>
+                <p>{task.tarefa}</p>
+              </Link>
+
+              <div className={styles.actions}>
                 <div>
-                  <FiCalendar size={20} color="#FFB800" />
-                  <time>17 Julho 2021</time>
+                  <div>
+                    <FiCalendar size={20} color="#FFB800" />
+                    <time>{task.createdFormated}</time>
+                  </div>
+                  <button onClick={(()=> handleEditTask(task))}>
+                    <FiEdit2 size={20} color="#FFF" />
+                    <span>Editar</span>
+                  </button>
                 </div>
-                <button>
-                  <FiEdit2 size={20} color="#FFF" />
-                  <span>Editar</span>
+
+                <button onClick={() => handleDelete(task.id)}>
+                  <FiTrash size={20} color="#FF3636" />
+                  <span>Excluir</span>
                 </button>
               </div>
-
-              <button>
-                <FiTrash size={20} color="#FF3636" />
-                <span>Excluir</span>
-              </button>
-            </div>
-          </article>
+            </article>
+          ))}
         </section>
       </main>
 
@@ -114,6 +208,23 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
       },
     };
   }
+
+  const collectionRef = collection(db, 'tarefas');
+  const q = query(
+    collectionRef,
+    where('userId', '==', session?.id),
+    orderBy('created', 'asc'),
+  );
+  const querySnapShot = await getDocs(q);
+  const data: string[] = [];
+  
+  querySnapShot.forEach((doc) => {
+    data.push({
+      id: doc.id,
+      createdFormated: format(new Date(), 'dd MMMM yyyy'),
+      ...doc.data(),
+    });
+  });
   const user = {
     name: session?.user?.name,
     id: session?.id,
@@ -121,6 +232,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   return {
     props: {
       user,
+      data: JSON.parse(JSON.stringify(data)),
     },
   };
 };
