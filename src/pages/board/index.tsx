@@ -7,7 +7,14 @@ import { getSession } from 'next-auth/react';
 import Link from 'next/link';
 
 import styles from './board.module.scss';
-import { FiPlus, FiCalendar, FiEdit2, FiTrash, FiClock, FiX } from 'react-icons/fi';
+import {
+  FiPlus,
+  FiCalendar,
+  FiEdit2,
+  FiTrash,
+  FiClock,
+  FiX,
+} from 'react-icons/fi';
 import { SupportButton } from '../../components/SupportButton/SupportButton';
 import { format } from 'date-fns';
 import { db } from '../../services/firebaseConnection';
@@ -44,8 +51,7 @@ export default function Board({ user, data }: BoardProps) {
   const [input, setInput] = useState('');
   const [taskList, setTaskList] = useState<TaskList[]>(data);
 
-  const [taskEdit, setTaskEdit] = useState<TaskList | null>(null)
-
+  const [taskEdit, setTaskEdit] = useState<TaskList | null>(null);
 
   async function handleAddTask(e: FormEvent) {
     e.preventDefault();
@@ -54,21 +60,20 @@ export default function Board({ user, data }: BoardProps) {
       return;
     }
 
-    if(taskEdit){
-        const tarefa = doc(db, "tarefas", taskEdit.id)
-        await updateDoc(tarefa, {
-            tarefa: input
-        }).then(()=>{
-            let data= taskList;
-            let taskIndex = taskList.findIndex(item => item.id === taskEdit.id)
-            data[taskIndex].tarefa = input
-            setTaskList(data)
-            setTaskEdit(null)
-            setInput('')
-        })
-        return;
+    if (taskEdit) {
+      const tarefa = doc(db, 'tarefas', taskEdit.id);
+      await updateDoc(tarefa, {
+        tarefa: input,
+      }).then(() => {
+        let data = taskList;
+        let taskIndex = taskList.findIndex((item) => item.id === taskEdit.id);
+        data[taskIndex].tarefa = input;
+        setTaskList(data);
+        setTaskEdit(null);
+        setInput('');
+      });
+      return;
     }
-
 
     const docRef = await addDoc(collection(db, 'tarefas'), {
       created: new Date(),
@@ -99,45 +104,45 @@ export default function Board({ user, data }: BoardProps) {
 
     if (alert) {
       await deleteDoc(doc(db, 'tarefas', id))
-      .then(() =>{
-        console.log('DELETADO COM SUCESSO')
-        let taskDeleted = taskList.filter(item =>{
-            return (item.id !== id)
-      })
-      setTaskList(taskDeleted)
-    })
-      .catch(error =>{
-          console.log(error)
-      });
+        .then(() => {
+          console.log('DELETADO COM SUCESSO');
+          let taskDeleted = taskList.filter((item) => {
+            return item.id !== id;
+          });
+          setTaskList(taskDeleted);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   }
 
-  function handleEditTask(task: TaskList){
-      setTaskEdit(task)
-      setInput(task.tarefa)
+  function handleEditTask(task: TaskList) {
+    setTaskEdit(task);
+    setInput(task.tarefa);
   }
 
-  function handleCancelEdit(){
-      setInput('')
-      setTaskEdit(null)
+  function handleCancelEdit() {
+    setInput('');
+    setTaskEdit(null);
   }
-
 
   return (
     <>
       <Head>
         <title>Minhas tarefas - Board</title>
+        <meta name='descripton' content="Página onde ficam todas as tarefas do usuário, aqui é onde ele organiza e analisa as tarefas a serem feitas."/>
+        <link rel="canonical" href="http://localhost:3000/board" />
       </Head>
       <main className={styles.container}>
-
-      {taskEdit && (
-        <span className={styles.warnText}>
-          <button onClick={ handleCancelEdit }>
-          <FiX size={30} color={"#FF3636"}/>
-          </button>
-          Você está editando uma tarefa
-        </span>
-      )}
+        {taskEdit && (
+          <span className={styles.warnText}>
+            <button onClick={handleCancelEdit}>
+              <FiX size={30} color={'#FF3636'} />
+            </button>
+            Você está editando uma tarefa
+          </span>
+        )}
 
         <form onSubmit={handleAddTask}>
           <input
@@ -152,7 +157,8 @@ export default function Board({ user, data }: BoardProps) {
         </form>
 
         <h1>
-          Você tem {taskList.length} {taskList.length === 1 ? 'Tarefa' : 'Tarefas'}
+          Você tem {taskList.length}{' '}
+          {taskList.length === 1 ? 'Tarefa' : 'Tarefas'}
         </h1>
 
         <section>
@@ -168,7 +174,7 @@ export default function Board({ user, data }: BoardProps) {
                     <FiCalendar size={20} color="#FFB800" />
                     <time>{task.createdFormated}</time>
                   </div>
-                  <button onClick={(()=> handleEditTask(task))}>
+                  <button onClick={() => handleEditTask(task)}>
                     <FiEdit2 size={20} color="#FFF" />
                     <span>Editar</span>
                   </button>
@@ -217,14 +223,17 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   );
   const querySnapShot = await getDocs(q);
   const data: string[] = [];
-  
+
   querySnapShot.forEach((doc) => {
+    // @ts-ignore
     data.push({
       id: doc.id,
       createdFormated: format(new Date(), 'dd MMMM yyyy'),
       ...doc.data(),
     });
+
   });
+
   const user = {
     name: session?.user?.name,
     id: session?.id,

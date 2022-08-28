@@ -27,6 +27,8 @@ export default function Task({ data }:TaskListProps) {
     <>
      <Head>
       <title>Detalhes da sua tarefa</title>
+      <meta name='descripton' content="Página da tarefa específica."/>
+        <link rel="canonical" href="http://localhost:3000/board/" />
      </Head>
     <article className={styles.container}>
       <div className={styles.actions}>
@@ -45,7 +47,8 @@ export default function Task({ data }:TaskListProps) {
 export const getServerSideProps: GetServerSideProps = async ({ req, params}) => {
   const session = await getSession({ req });
   const id = params?.id
-  if (!session?.id) {
+
+  if (!session?.vip) {
     //Se o user não tiver logado, vamos redirecionar.
     return {
       redirect: {
