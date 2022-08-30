@@ -2,13 +2,13 @@ import { initializeApp } from 'firebase/app'
 import { getFirestore } from 'firebase/firestore'
 
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || '',
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || '',
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || '',
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || '',
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || '',
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || '',
-  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || ''
+  apiKey: 'AIzaSyAfO8nkOUHCJTtKYXbcqLGPOrWUy8FV0gY',
+  authDomain:'boardapp-a130c.firebaseapp.com',
+  projectId: 'boardapp-a130c',
+  storageBucket: 'boardapp-a130c.appspot.com',
+  messagingSenderId: '731615614200',
+  appId: '1:731615614200:web:78296d4c666535e44a170d',
+  measurementId: 'G-K480ECNR0H'
 };
 
 
