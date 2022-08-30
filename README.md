@@ -1,34 +1,100 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Título
+<h1 align="center"> Board - Tarefas do dia cada vez mais fáceis de serem realizadas. </h1>
 
-## Getting Started
 
-First, run the development server:
+## Índice 
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+* [Título](#Título)
+* [Índice](#índice)
+* [Descrição do Projeto](#descrição-do-projeto)
+* [Status do Projeto](#status-do-Projeto)
+* [Funcionalidades e Demonstração da Aplicação](#funcionalidades-e-demonstração-da-aplicação)
+* [Estrutura GitHub](#estrutura-github)
+* [Acesso ao Projeto](#acesso-ao-projeto)
+* [Tecnologias utilizadas](#tecnologias-utilizadas)
+* [Conclusão](#conclusão)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Descricao do Projeto
+Esse é um projeto onde eu criei um to do list, onde você pode Criar, Listar, Alterar e excluir sua tarefas do dia. Porém apenas pessoas que apoiaram/doaram para o projeto vão ter mais opções bônus como Alterar e acessar a página da tarefa.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+![8ee1d7c722475aef6a02b63bf2cd322f](https://user-images.githubusercontent.com/101679780/187558894-c53988ec-c785-40f8-8c64-39af06008df3.png)
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
-## Learn More
+## Status do Projeto
+<h4 align="center"> 
+    ✔️Projeto Concluído v1.0 ✔️
+</h4>
 
-To learn more about Next.js, take a look at the following resources:
+## :hammer: Funcionalidades do projeto e Demonstração da Aplicação
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **`Funcionalidade 1`: Autênticação de contas com o Github.**
+- **`Funcionalidade 2`: Adicionar, alterar, excluir e Listar suas tarefas.**
+- **`Funcionalidade 3`: Doação via Paypal**
+- **`Funcionalidade 3.1`: Funcionalidades extras para quem fez uma doação e se tornou Vip.**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Resumidamente essas são as funcionalidades, mas para você realmente ter uma experiência mais elegante, por favor, visite meu projeto aqui, ele está online👀
 
-## Deploy on Vercel
+https://board-app-todo.herokuapp.com/
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Não esqueça de deixar sua doação por lá para ter acesso a mais funcionalidades😎
+	
+	
+## 🌝 Estrutura Github
+**A estrutura do projeto no GitHub funciona básicamente assim:
+	<ul>
+		<li>1 - Nesse projeto deixei apenas a branch Main.</li>
+		<li>2 - Quando eu dou push para o github através da branch MAIN, acontece um GATILHO no HEROKU, onde ele faz deploy da aplicação automaticamente a partir da branch main..</li>
+	</ul>
+		Obs: Ou seja, consigo fazer deploy da aplicação de qualquer lugar :moon:**
+	
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## 📁 Acesso ao projeto
+
+**Você pode acessar o código fonte do projeto clicando aqui <a>https://github.com/GabriellDev0/projeto-board</a> ou baixa-lo <a>https://github.com/GabriellDev0/projeto-board/archive/refs/heads/main.zip</a>**
+
+## 🛠️ Abrir e rodar o projeto
+
+**Após baixar o projeto, você pode abrir com o Visual Studio Code. Para isso, na tela de launcher clique em:**
+    <ul>
+        <li>Abrir projeto existente ( ou algum similar )</li>
+        <li>Procure o local onde o projeto está e o selecione ( Caso o projeto seja baixado via zip, é necessário extraí-lo antes de procurá-lo )</li>
+        <li>Por fim clique OK</li>
+        <li>Abra o terminal em "Terminal" -> "New Terminal" e execute o comando **npm install**</li>
+        <li>Configure as variáveis de Ambiente criando um arquivo .env na pasta principal do projeto.**</li>
+	<h4>Configurações das Variáveis de ambiente do seu projeto no Firebase:</h4>
+        <li>GITHUB_CLIENT_ID=""</li>
+        <li>GITHUB_CLIENT_SECRET=""</li>
+        <li>NEXTAUTH_URL="http://localhost:{suaPorta}/"</li>
+	<li>Inicie o servidor local com: **npm run dev**</li>
+    </ul>
+    
+## 👨‍💻 Tecnologias Utilizadas
+**Tecnologias nas quais usei:**
+   	<ul>
+		<li>Next JS ( HTML, SCSS, JS )</li>
+    <li>Typescript</li>
+		<li>Firebase: FireStore</li>
+	</ul>
+
+## 📚 Bibliotecas Utilizadas
+**Bibliotecas nas quais usei:**
+	<ul>
+		<li> npm install @paypal/react-paypal-js </li>
+		<a>https://www.npmjs.com/package/@paypal/react-paypal-js/</a>
+	</ul>
+	<ul>
+		<li> npm date-fns </li>
+		<a>https://www.npmjs.com/package/date-fns</a>
+	</ul>
+	<ul>
+		<li> npm install firebase </li>
+		<a>https://firebase.google.com/?hl=pt</a>
+	</ul>
+	<ul>
+		<li>npm next-auth</li>
+		<a>https://next-auth.js.org/</a>
+	</ul>
+
+## ㊗️ Conclusão
+   **Esse projeto foi bastante simples, a ideia mesmo era conseguir usar o NextAuth em conjunto com alguma aplicação de pagamentos, para conseguir criar funcionalidades exclusivar para quem se tornou apoiador/vip da aplicação, e aproveitei para colocar meu Typescript em prática nesse projeto, aprendi bastante coisa, quebrei bastante cabeça nas documentações, apesar do projeto ser simples. Vejo vocês nos próximos projetos 😁**
