@@ -2,30 +2,24 @@ import { GetStaticProps } from 'next';
 import Head from 'next/head';
 import styles from '../styles/styles.module.scss';
 import Image from 'next/image';
-import { db } from '../services/firebaseConnection'
-import {
-  collection,
-  getDocs,
-  query,
-  orderBy,
-  where,
-} from 'firebase/firestore';
+import boardUser from '../../public/images/board-user.svg';
+import { db } from '../services/firebaseConnection';
+import { collection, getDocs, query, orderBy, where } from 'firebase/firestore';
 import { useState } from 'react';
 
+type Data = {
+  id: string;
+  donate: boolean;
+  lastDonate: Date;
+  image: string;
+};
 
-type Data ={
-  id: string,
-  donate: boolean,
-  lastDonate: Date,
-  image: string
-}
-
-interface HomeProps{
+interface HomeProps {
   data: [];
 }
 
-export default function Home({data}: HomeProps) {
-  const [donaters, setDonaters] = useState<Data[]>(data)
+export default function Home({ data }: HomeProps) {
+  const [donaters, setDonaters] = useState<Data[]>(data);
   return (
     <>
       <Head>
@@ -37,12 +31,7 @@ export default function Home({data}: HomeProps) {
         <link rel="canonical" href="http://localhost:3000/" />
       </Head>
       <main className={`${styles.contentContainer} Content`}>
-        <Image
-          width="500px"
-          height="345px"
-          src="/images/board-user.svg"
-          alt="Ferramenta Board"
-        />
+        <Image src={boardUser} alt="Ferramenta Board" />
         <section className={styles.callToAction}>
           <h1>
             Uma ferramenta para seu dia a dia Escreva, planeje e organize-se..
@@ -53,16 +42,16 @@ export default function Home({data}: HomeProps) {
         </section>
 
         <div className={styles.donaters}>
-        {donaters.length !== 0 && <h3>Apoiadores: </h3>}
+          {donaters.length !== 0 && <h3>Apoiadores: </h3>}
           <div>
-            {donaters.map((item) =>(
+            {donaters.map((item) => (
               <Image
-              key={item.image}
-              width="65px"
-              height="65px"
-              src={item.image}
-              alt="Usuário 1"
-            />
+                key={item.image}
+                width={65}
+                height={65}
+                src={item.image}
+                alt="Usuários"
+              />
             ))}
           </div>
         </div>
@@ -72,11 +61,8 @@ export default function Home({data}: HomeProps) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-
   const collectionRef = collection(db, 'users');
-  const q = query(
-    collectionRef,
-  );
+  const q = query(collectionRef);
   const querySnapShot = await getDocs(q);
   const data: string[] = [];
 
@@ -85,7 +71,7 @@ export const getStaticProps: GetStaticProps = async () => {
     data.push({
       ...doc.data(),
     });
-    return data
+    return data;
   });
 
   return {

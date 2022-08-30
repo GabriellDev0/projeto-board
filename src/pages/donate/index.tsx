@@ -1,5 +1,7 @@
 import Head from 'next/head';
 import styles from './styles.module.scss';
+import Image from 'next/image';
+import imgRocket from '../../../public/images/rocket.svg'
 import { useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/react';
@@ -39,11 +41,11 @@ export default function Donate({ user }: DonateProps) {
         <link rel="canonical" href="http://localhost:3000/donate" />
       </Head>
       <main className={styles.container}>
-        <img src="/images/rocket.svg" alt="Seja Apoiador" />
+        <Image src={imgRocket} alt="Seja Apoiador" />
 
         {vip && (
           <div className={styles.vip}>
-            <img src={user.image} alt="Foto de perfil do usuário" />
+            <Image width={50} height={50} src={user.image} alt="Foto de perfil do usuário" />
             <span>Parabéns você é um novo apoiador!</span>
           </div>
         )}

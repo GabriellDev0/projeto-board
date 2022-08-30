@@ -68,7 +68,19 @@ export const getServerSideProps: GetServerSideProps = async ({ req, params}) => 
         nome: snapshot.data()?.nome
       }
       return JSON.stringify(data)
+  }).catch((err)=>{
+      return {} // retorna objeto vazio
   })
+
+  // verifica se tiver o objeto vazio, ou no casso ERRO.
+  if(Object.keys(data).length === 0){
+    return {
+      redirect: {
+        destination: '/board',
+        permanent: false,
+      },
+    };
+  }
 
   return {
     props: {
