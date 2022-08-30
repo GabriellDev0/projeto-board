@@ -62,7 +62,7 @@ Não esqueça de deixar sua doação por lá para ter acesso a mais funcionalida
         <li>Por fim clique OK</li>
         <li>Abra o terminal em "Terminal" -> "New Terminal" e execute o comando **npm install**</li>
         <li>Configure as variáveis de Ambiente criando um arquivo .env na pasta principal do projeto.**</li>
-	<h4>Configurações das Variáveis de ambiente do seu projeto no Firebase:</h4>
+	<h4>Configurações das Variáveis de ambiente do seu projeto no NextAuth: </h4>
         <li>GITHUB_CLIENT_ID=""</li>
         <li>GITHUB_CLIENT_SECRET=""</li>
         <li>NEXTAUTH_URL="http://localhost:{suaPorta}/"</li>
